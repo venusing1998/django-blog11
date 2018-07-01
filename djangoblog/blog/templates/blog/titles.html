@@ -8,12 +8,15 @@
     <div class="col-xs-12 col-md-8">
         <ul>
             {% for blog in blogs %}
-            <li>{{ blog.title }}</li>
+            <li>
+                <a href="{{ blog.id }}">{{ blog.title }}</a>
+            </li>
             {% endfor %}
         </ul>
     </div>
     <div class="col-xs-6 col-md-4">
-        <h2>Hello, I am Chris. Nice to meet you.</h2>
+        <h2>Ads</h2>
+        <P>Hello, I am Chris. Nice to meet you.</P>
         <img width="200px" src="" alt="Disappear">
     </div>
 </div>
