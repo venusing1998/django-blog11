@@ -13,9 +13,18 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right" style="margin-right:10px">
+                {% if user.is_authenticated %}
                 <li>
-                    <a href="{% url 'account:user_login' %}">LOGIN</a>
+                    <a href="#">{{ user.username }}</a>
                 </li>
+                <li>
+                    <a href="{% url 'account:user_logout' %}">Logout</a>
+                </li>
+                {% else %}
+                <li>
+                    <a href="{% url 'account:user_login' %}">Login</a>
+                </li>
+                {% endif %}
             </ul>
         </div>
     </nav>
