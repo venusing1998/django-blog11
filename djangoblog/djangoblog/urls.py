@@ -20,7 +20,7 @@ from index import views as index_views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r"^$", include("index.urls", namespace="index", app_name="index")),
+    url(r"^", include("index.urls", namespace="index", app_name="index")),
     url(r"^account/", include("account.urls", namespace="account", app_name="account")),
     url(r"^blog/", include("blog.urls", namespace="blog", app_name="blog")),
 ]
