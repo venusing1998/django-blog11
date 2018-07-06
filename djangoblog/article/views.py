@@ -1,14 +1,11 @@
-from django.shortcuts import render, get_object_or_404
-
-# Create your views here.
 from django.contrib.auth.decorators import login_required
-from .models import ArticleColumn
-from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, render
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
-from .models import ArticleColumn, ArticlePost
 from .forms import ArticleColumnForm, ArticlePostForm
+from .models import ArticleColumn, ArticlePost
 
 
 @login_required(login_url='/account/login/')
