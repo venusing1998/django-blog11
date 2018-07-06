@@ -13,9 +13,13 @@
         {% for article in articles %}
         <tr id={{ article.id }}>
             <td>{{ forloop.counter }}</td>
-            <td>{{ article.title }}</td>
+            <td>
+                <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
+            </td>
             <td>{{ article.column }}</td>
-            <td>--
+            <td>
+                <span class="glyphicon glyphicon-pencil"></span>
+                <span class="glyphicon glyphicon-trash" style="margin-left:20px;"></span>
             </td>
         </tr>
         {% endfor %}
