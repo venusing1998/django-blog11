@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 # Create your views here.
 from django.contrib.auth.decorators import login_required
@@ -7,8 +7,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.views.decorators.http import require_POST
 
-from .models import ArticleColumn
-from .forms import ArticleColumnForm
+from .models import ArticleColumn, ArticlePost
+from .forms import ArticleColumnForm, ArticlePostForm
 
 
 @login_required(login_url='/account/login/')
@@ -52,7 +52,61 @@ def del_article_column(request):
     column_id = request.POST["column_id"]
     try:
         line = ArticleColumn.objects.get(id=column_id)
-        line.delete() 
+        line.delete()
         return HttpResponse("1")
     except:
         return HttpResponse("2")
+
+
+@login_required(login_url='/account/login')
+@csrf_exempt
+def article_post(request):
+    if request.method == "POST":
+        article_post_form = ArticlePostForm(data=request.POST)
+        if article_post_form.is_valid():
+            cd = article_post_form.cleaned_data
+            try:
+                new_article = article_post_form.save(commit=False)
+                new_article.author = request.user
+                new_article.column = request.user.article_column.get(
+                    id=request.POST['column_id'])
+                new_article.save()
+                # tags = request.POST['tags']
+                # if tags:
+                #     for atag in json.loads(tags):
+                #         tag = request.user.tag.get(tag=atag)
+                #         new_article.article_tag.add(tag)
+                return HttpResponse("1")
+            except:
+                return HttpResponse("2")
+        else:
+            return HttpResponse("3")
+    else:
+        article_post_form = ArticlePostForm()
+        article_columns = request.user.article_column.all()
+        # article_tags = request.user.tag.all()
+        return render(request, "article/column/article_post.html", {"article_post_form": article_post_form, "article_columns": article_columns})
+
+
+@login_required(login_url='/account/login')
+def article_list(request):
+    articles = ArticlePost.objects.filter(author=request.user)
+    return render(request, "article/column/article_list.html", {"articles": articles})
+    # articles_list = ArticlePost.objects.filter(author=request.user)
+    # paginator = Paginator(articles_list, 2)
+    # page = request.GET.get('page')
+    # try:
+    #     current_page = paginator.page(page)
+    #     articles = current_page.object_list
+    # except PageNotAnInteger:
+    #     current_page = paginator.page(1)
+    #     articles = current_page.object_list
+    # except EmptyPage:
+    #     current_page = paginator.page(paginator.num_pages)
+    #     articles = current_page.object_list
+    # return render(request, "article/column/article_list.html", {"articles":articles, "page": current_page})
+
+@login_required(login_url='/account/login')
+def article_detail(request, id, slug):
+    article = get_object_or_404(ArticlePost, id=id, slug=slug)
+    return render(request, "article/column/article_detail.html", {"article":article})
