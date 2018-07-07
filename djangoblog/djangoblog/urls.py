@@ -13,8 +13,9 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url, include
+from django.conf.urls import include, url
 from django.contrib import admin
+from django.views.generic import TemplateView
 
 from index import views as index_views
 
@@ -26,4 +27,5 @@ urlpatterns = [
     url(r"^blog/", include("blog.urls", namespace="blog", app_name="blog")),
     url(r"^article/", include("article.urls",
                               namespace="article", app_name="article")),
+    url(r'^home/', TemplateView.as_view(template_name="home.html"), name="home"),
 ]

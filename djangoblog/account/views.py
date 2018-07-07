@@ -1,6 +1,7 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 
@@ -55,7 +56,7 @@ def register(request):
             new_profile.user = new_user
             new_profile.save()
             UserInfo.objects.create(user=new_user)
-            return HttpResponse("Successfully")
+            return HttpResponseRedirect(reverse("account:user_login"))
             # return HttpResponseRedirect(reverse("account:user_login"))
         else:
             return HttpResponse("Sorry, your can not register.")
